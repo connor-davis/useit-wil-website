@@ -1,0 +1,143 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Use-IT - @ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/styles.css">
+    <style>
+        .frosted-glass {
+            background: rgba(5, 46, 22, 0.9) !important; /* Semi-transparent white */
+            backdrop-filter: blur(10px) !important; /* Apply blur effect to background */
+            -webkit-backdrop-filter: blur(10px) !important; /* Safari fix */
+        }
+
+        .sticky-navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 10;
+        }
+
+        /* Initial solid green color (green-900) */
+        .initial-green {
+            background-color: #14532d; /* Tailwind's green-900 hex */
+        }
+    </style>
+</head>
+<body>
+    <div id="navbar-background" class="initial-green">
+        <nav class="flex items-center justify-between flex-wrap p-6 bg-transparent">
+            <div class="flex items-center flex-shrink-0 text-white space-x-3">
+                <img src="~/assets/logo.png" width="32" height="32" />
+                <span class="font-semibold text-xl tracking-tight">Use-IT</span>
+            </div>
+            <div class="block lg:hidden">
+                <button class="flex items-center px-3 py-2 border rounded text-green-100 border-green-400 hover:text-white hover:border-white" id="navbar-btn">
+                    <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <title>Menu</title>
+                        <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
+                    </svg>
+                </button>
+            </div>
+            <div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto " id="navbar">
+                <div class="text-sm lg:flex-grow  text-center lg:text-right">
+                    <a asp-area="" asp-controller="Home" asp-action="Index"
+                       class="block mt-4 lg:inline-block lg:mt-0 text-green-100 hover:text-white mr-4 text-lg">
+                        Home
+                    </a>
+                    <a asp-area="" asp-controller="Home" asp-action="Story"
+                       class="block mt-4 lg:inline-block lg:mt-0 text-green-100 hover:text-white mr-4 text-lg">
+                        Our Story
+                    </a>
+                    <a asp-area="" asp-controller="Home" asp-action="Projects"
+                       class="block mt-4 lg:inline-block lg:mt-0 text-green-100 hover:text-white mr-4 text-lg">
+                        Our Projects
+                    </a>
+                    <a asp-area="" asp-controller="Home" asp-action="Media"
+                       class="block mt-4 lg:inline-block lg:mt-0 text-green-100 hover:text-white mr-4 text-lg">
+                        Media
+                    </a>
+                    <a asp-area="" asp-controller="Home" asp-action="Contact"
+                       class="block mt-4 lg:inline-block lg:mt-0 text-green-100 hover:text-white mr-4 text-lg">
+                        Contact Us
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <div class="flex flex-col">
+        @RenderBody()
+    </div>
+
+    <div class="flex flex-col w-full h-auto bg-neutral-950">
+        <div class="text-neutral-400 p-3 w-full">
+            &copy; Copyright 2024 USE-IT Waste Benefication all rights reserved <span class="text-amber-200">|</span> Designed by SwiftTech
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            var $window = $(window);
+
+            function checkWindowWidth() {
+
+                var windowsize = $window.width();
+
+                if (windowsize > 1000) {
+
+                    $('#navbar').css('display', 'block');
+
+                } else {
+
+                    $('#navbar').css('display', 'none');
+
+                }
+            }
+
+            checkWindowWidth();
+
+            $(window).resize(checkWindowWidth);
+
+        });
+
+
+        $('#navbar-btn').click(function () {
+            $('#navbar').toggle();
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            var navbar = $('#navbar');
+            var navbarBackground = $("#navbar-background");
+            var sticky = navbar.offset().top;
+
+            // Reset the navbar to initial state on page load
+            navbarBackground.removeClass('sticky-navbar frosted-glass').addClass('initial-green');
+
+            // On scroll event
+            $(window).scroll(function () {
+                if ($(window).scrollTop() >= sticky) {
+                    // Apply sticky and frosted effect when scrolling past navbar
+                    navbarBackground.addClass('sticky-navbar frosted-glass').removeClass('initial-green');
+                } else {
+                    // Reset navbar to its initial state when at the top
+                    navbarBackground.removeClass('sticky-navbar frosted-glass').addClass('initial-green');
+                }
+            });
+
+            // Reset on page reload or when going back to top
+            $(window).on('beforeunload', function () {
+                // Reset navbar before unloading the page
+                navbarBackground.removeClass('sticky-navbar frosted-glass').addClass('initial-green');
+            });
+        });
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
